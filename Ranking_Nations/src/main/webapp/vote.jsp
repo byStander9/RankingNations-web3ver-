@@ -78,16 +78,28 @@
 	<%@include file="dbconn.jsp" %>
 	
 	<%
-		String category = request.getParameter("clothes");
-		String[][] ChinaData = new String[9][3];
+		String category = request.getParameter("category");
+		String[][] ChinaData = new String[5][3];
+		String[][] KoreaData = new String[5][3];
+		String[][] JapanData = new String[5][3];
 		try {
-	        String sql = "SELECT * FROM clothes WHERE country_name = 'China'"; // 3개의 이미지만 가져오기
+	        String sql = "SELECT * FROM " +category+ " WHERE country_name = 'China'"; // 3개의 이미지만 가져오기
 	        rs = stmt.executeQuery(sql);
 	        int index1 = 0;
 	        while(rs.next()) {
 	            ChinaData[index1][0] = rs.getString("clothing_name");
 	            ChinaData[index1][1] = rs.getString("image");
 	            ChinaData[index1][2] = rs.getString("description");
+	            index1++;
+	        }
+	        
+	        sql = "SELECT * FROM " +category+ " WHERE country_name = 'Korea'"; // 3개의 이미지만 가져오기
+	        rs = stmt.executeQuery(sql);
+	        index1 = 0;
+	        while(rs.next()) {
+	            KoreaData[index1][0] = rs.getString("clothing_name");
+	            KoreaData[index1][1] = rs.getString("image");
+	            KoreaData[index1][2] = rs.getString("description");
 	            index1++;
 	        }
 	    } catch (Exception e) {
@@ -115,7 +127,7 @@
 	        <div id="description-1" class="description">
 	            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
 	            <%
-	                
+	                out.print(ChinaData[0][2]);
 	            %>
 	        </div>
 	    </div>
@@ -123,7 +135,7 @@
 	    <div class="gear-item">
 	        <div id="gear-text-2">Outdoor Gear 2</div>
 	        <div class="image-frame" id="image-frame-2">
-		        <img id="gear-img-2" src="placeholder.svg" alt="Outdoor Gear 2">
+		        <img id="gear-img-2" src="<%= KoreaData[0][1] %>" alt="Outdoor Gear 2">
 		    </div>
 	        <div id="buttons-2" class="buttons">
 	            <button>1st</button>
@@ -142,7 +154,7 @@
 	    <div class="gear-item">
 	        <div id="gear-text-3">Outdoor Gear 3</div>
 	        <div class="image-frame" id="image-frame-3">
-		        <img id="gear-img-3" src="placeholder.svg" alt="Outdoor Gear 3">
+		        <img id="gear-img-3" src="<%= ChinaData[2][1] %>" alt="Outdoor Gear 3">
 		    </div>
 	        <div id="buttons-3" class="buttons">
 	            <button>1st</button>
