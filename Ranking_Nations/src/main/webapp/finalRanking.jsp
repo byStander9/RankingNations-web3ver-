@@ -12,25 +12,33 @@
         margin: 0;
         padding: 0;
         background-color: #f5f5f5;
-        height: 100%;
+        height: 55%;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .container {
+        flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         width: 100%;
-        height: 100%;
-        padding: 2%;
+        padding: 0;
+    }
+    header {
+        margin-bottom: 5px;
     }
     table {
         width: 70%;
         border-collapse: collapse;
-        margin: 20px 0;
+        margin: 5px 0;
     }
     th, td {
         border: 1px solid #000;
-        padding: 8px;
+        padding: 4px;
         text-align: center;
     }
     th {
@@ -39,6 +47,18 @@
     }
     td {
         background-color: #f9f9f9;
+    }
+    .options {
+        margin: 5px 0;
+    }
+    footer {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background-color: #333;
+        color: #fff;
+        position: fixed;
+        bottom: 0;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -111,7 +131,7 @@
             <label><input type="checkbox" id="show2ndPlace" onclick="updateChart()" checked> Show 2nd Place</label>
             <label><input type="checkbox" id="show3rdPlace" onclick="updateChart()" checked> Show 3rd Place</label>
         </div>
-        <canvas id="rankingChart" width="400" height="200"></canvas>
+        <canvas id="rankingChart" width="200" height="55"></canvas>
     </div>
 
     <jsp:include page="footer.jsp" />

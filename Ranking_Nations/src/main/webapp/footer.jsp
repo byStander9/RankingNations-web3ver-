@@ -7,16 +7,18 @@
 <title>Insert title here</title>
 	<style>
 		.footer {
-           background-color: #f0f0f0;
-           padding: 20px;
+           background-color: #2C3E50;
+    		color: #ffffff;
            display: flex;
            justify-content: space-around;
+           text-align: center;
+           height: 10vh;
        }
        .footer div {
            width: 200px;
        }
        .footer a {
-           color: #333;
+           color: #ffffff;
            text-decoration: none;
        }
 	</style>
@@ -24,38 +26,12 @@
 <body>
 <div class="footer">
         <div>
-            <h4>Company</h4>
-            <a href="#">About Us</a><br>
-            <a href="#">Our Team</a><br>
-            <a href="#">Careers</a><br>
-            <a href="#">News</a>
-        </div>
-        <div>
-            <h4>Products</h4>
-            <a href="#">Men</a><br>
-            <a href="#">Women</a><br>
-            <a href="#">Kids</a><br>
-            <a href="#">Accessories</a>
-        </div>
-        <div>
-            <h4>Resources</h4>
-            <a href="#">Blog</a><br>
-            <a href="#">Community</a><br>
-            <a href="#">Support</a><br>
-            <a href="#">FAQs</a>
-        </div>
-        <div>
-            <h4>Legal</h4>
-            <a href="#">Privacy Policy</a><br>
-            <a href="#">Terms of Service</a><br>
-            <a href="#">Cookie Policy</a>
+            <h4>COPYLEFT</h4>
+            <h6>돌집개발자</h6>
         </div>
         <div>
             <h4>Contact</h4>
-            <a href="#">Support</a><br>
-            <a href="#">Sales</a><br>
-            <a href="#">Press</a><br>
-            <a href="#">Partnerships</a>
+            <h6>강원특별자치도 춘천시 삭주로 돌집</h6>
         </div>
     </div>
 </body>

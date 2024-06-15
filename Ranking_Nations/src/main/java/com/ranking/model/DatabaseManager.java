@@ -2,6 +2,7 @@ package com.ranking.model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.lang.reflect.Type;
@@ -28,7 +29,7 @@ public class DatabaseManager {
             try  {
             	rs = stmt.executeQuery();
                 while (rs.next()) {
-                    data.add(new String[]{rs.getString("clothing_name"), rs.getString("image"), rs.getString("description")});
+                    data.add(new String[]{rs.getString(category + "_name"), rs.getString("image"), rs.getString("description")});
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -136,6 +137,46 @@ public class DatabaseManager {
         rs.close();
         pstmtSelect.close();
     
+    }
+    
+    public static Map<String, int[]> getCategoryRankings(String category) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Map<String, int[]> rankings = new HashMap<>();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+            String sql = "SELECT country_name, firstPlace, secondPlace, thirdPlace, totalScore FROM scoreBoard WHERE category = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, category);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String country = rs.getString("country_name");
+                int firstPlace = rs.getInt("firstPlace");
+                int secondPlace = rs.getInt("secondPlace");
+                int thirdPlace = rs.getInt("thirdPlace");
+                int totalScore = rs.getInt("totalScore");
+
+                int[] scores = rankings.getOrDefault(country, new int[4]);
+                scores[0] += firstPlace;
+                scores[1] += secondPlace;
+                scores[2] += thirdPlace;
+                scores[3] += totalScore;
+                rankings.put(country, scores);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {}
+            if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
+        }
+
+        return rankings;
     }
     
 }

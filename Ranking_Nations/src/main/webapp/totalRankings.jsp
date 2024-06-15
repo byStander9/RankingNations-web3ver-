@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, java.util.*, com.google.gson.Gson, com.google.gson.reflect.TypeToken" %>
+<%@ page import="java.sql.*, java.util.*, com.google.gson.Gson, com.google.gson.reflect.TypeToken, com.ranking.model.DatabaseManager" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,25 +11,33 @@
         margin: 0;
         padding: 0;
         background-color: #f5f5f5;
-        height: 100%;
+        height: 55%;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .container {
+        flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         width: 100%;
-        height: 100%;
-        padding: 2%;
+        padding: 0;
+    }
+    header {
+        margin-bottom: 5px;
     }
     table {
         width: 70%;
         border-collapse: collapse;
-        margin: 20px 0;
+        margin: 5px 0;
     }
     th, td {
         border: 1px solid #000;
-        padding: 8px;
+        padding: 4px;
         text-align: center;
     }
     th {
@@ -40,8 +48,18 @@
         background-color: #f9f9f9;
     }
     .options {
-        margin: 20px 0;
+        margin: 5px 0;
     }
+    footer {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background-color: #333;
+        color: #fff;
+        position: fixed;
+        bottom: 0;
+    }
+    
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -62,63 +80,16 @@
             </thead>
             <tbody>
                 <%
-                    String category = request.getParameter("category");
-                    Connection conn = null;
-                    PreparedStatement pstmt = null;
-                    ResultSet rs = null;
+                String category = request.getParameter("category");
+                Map<String, int[]> rankings = DatabaseManager.getCategoryRankings(category);
 
-                    int[] chinaScores = {0, 0, 0};
-                    int[] koreaScores = {0, 0, 0};
-                    int[] japanScores = {0, 0, 0};
-                    int chinaTotal = 0;
-                    int koreaTotal = 0;
-                    int japanTotal = 0;
+                int[] chinaScores = rankings.getOrDefault("China", new int[4]);
+                int[] koreaScores = rankings.getOrDefault("Korea", new int[4]);
+                int[] japanScores = rankings.getOrDefault("Japan", new int[4]);
 
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webserverdev_proj", "root", "rlsRms5244");
-
-                        String sql = "SELECT country_name, firstPlace, secondPlace, thirdPlace, totalScore FROM scoreBoard WHERE category = ?";
-                        pstmt = conn.prepareStatement(sql);
-                        pstmt.setString(1, category);
-                        rs = pstmt.executeQuery();
-
-                        while (rs.next()) {
-                            String country = rs.getString("country_name");
-                            int firstPlace = rs.getInt("firstPlace");
-                            int secondPlace = rs.getInt("secondPlace");
-                            int thirdPlace = rs.getInt("thirdPlace");
-                            int totalScore = rs.getInt("totalScore");
-
-                            if ("China".equalsIgnoreCase(country)) {
-                                chinaScores[0] += firstPlace;
-                                chinaScores[1] += secondPlace;
-                                chinaScores[2] += thirdPlace;
-                                chinaTotal += totalScore;
-                            } else if ("Korea".equalsIgnoreCase(country)) {
-                                koreaScores[0] += firstPlace;
-                                koreaScores[1] += secondPlace;
-                                koreaScores[2] += thirdPlace;
-                                koreaTotal += totalScore;
-                            } else if ("Japan".equalsIgnoreCase(country)) {
-                                japanScores[0] += firstPlace;
-                                japanScores[1] += secondPlace;
-                                japanScores[2] += thirdPlace;
-                                japanTotal += totalScore;
-                            }
-                        }
-
-                        out.print("<tr><td>China</td><td>" + chinaScores[0] + "</td><td>" + chinaScores[1] + "</td><td>" + chinaScores[2] + "</td><td>" + chinaTotal + "</td></tr>");
-                        out.print("<tr><td>Korea</td><td>" + koreaScores[0] + "</td><td>" + koreaScores[1] + "</td><td>" + koreaScores[2] + "</td><td>" + koreaTotal + "</td></tr>");
-                        out.print("<tr><td>Japan</td><td>" + japanScores[0] + "</td><td>" + japanScores[1] + "</td><td>" + japanScores[2] + "</td><td>" + japanTotal + "</td></tr>");
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
-                        if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {}
-                        if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
-                    }
+                out.print("<tr><td>China</td><td>" + chinaScores[0] + "</td><td>" + chinaScores[1] + "</td><td>" + chinaScores[2] + "</td><td>" + chinaScores[3] + "</td></tr>");
+                out.print("<tr><td>Korea</td><td>" + koreaScores[0] + "</td><td>" + koreaScores[1] + "</td><td>" + koreaScores[2] + "</td><td>" + koreaScores[3] + "</td></tr>");
+                out.print("<tr><td>Japan</td><td>" + japanScores[0] + "</td><td>" + japanScores[1] + "</td><td>" + japanScores[2] + "</td><td>" + japanScores[3] + "</td></tr>");
                 %>
             </tbody>
         </table>
@@ -128,15 +99,15 @@
             <label><input type="checkbox" id="show2ndPlace" onclick="updateChart()" checked> Show 2nd Place</label>
             <label><input type="checkbox" id="show3rdPlace" onclick="updateChart()" checked> Show 3rd Place</label>
         </div>
-        <canvas id="rankingChart" width="400" height="200"></canvas>
+        <canvas id="rankingChart" width="200" height="55"></canvas>
     </div>
 
     <jsp:include page="footer.jsp" />
 </body>
 <script>
-    const chinaScores = [<%= chinaScores[0] %>, <%= chinaScores[1] %>, <%= chinaScores[2] %>, <%= chinaTotal %>];
-    const koreaScores = [<%= koreaScores[0] %>, <%= koreaScores[1] %>, <%= koreaScores[2] %>, <%= koreaTotal %>];
-    const japanScores = [<%= japanScores[0] %>, <%= japanScores[1] %>, <%= japanScores[2] %>, <%= japanTotal %>];
+    const chinaScores = [<%= chinaScores[0] %>, <%= chinaScores[1] %>, <%= chinaScores[2] %>, <%= chinaScores[3] %>];
+    const koreaScores = [<%= koreaScores[0] %>, <%= koreaScores[1] %>, <%= koreaScores[2] %>, <%= koreaScores[3] %>];
+    const japanScores = [<%= japanScores[0] %>, <%= japanScores[1] %>, <%= japanScores[2] %>, <%= japanScores[3] %>];
 
     const data = {
         labels: ['China', 'Korea', 'Japan'],

@@ -6,13 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Outdoor Gear Rating</title>
+
 <style>
     html, body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         background-color: #f5f5f5;
-        height: 55%;
+        height: 40vh;
     }
     .container {
         display: flex;
@@ -20,25 +21,45 @@
         align-items: center;
         width: 100%;
         height: 80%;
-        padding: 7% 0 13% 0;
+        padding: 3% 0 17% 0;
     }
     .gear-item {
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 30%;
-        height: 100%;
+        height: 37vh;
         text-align: center;
-        margin: 0 1%;
+        margin: 4% 0 0 0 ;
     }
     .buttons {
         margin-top: 10px;
     }
-    .description {
+    .description-container {
         display: none;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .description-content {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .description-content img {
+        width: 100px; /* 작은 이미지 사이즈 */
+        height: auto;
+        margin-right: 20px;
+    }
+    .description-text {
+        flex: 1;
+    }
+    .description {
+        padding-bottom: 2vh;
     }
     .image-frame {
         width: 100%;
-        height: 150%;
-        border: 1px solid #ccc;
+        height: 150vh;
         justify-content: center;
         align-items: center;
         display: flex;
@@ -52,16 +73,31 @@
         object-fit: cover;
     }
     .next-button {
-        margin-top: 20px;
+        margin: 3px 0 15px 28%
     }
     .selected {
         background-color: #000;
         color: #fff;
     }
-    .next-button {
-    	margin-left: 28%;
+    .prompt-container {
+        align-items: center;
+        width: 100%;
+    }
+    .prompt-input {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .prompt-response {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        margin-left: 6px;
     }
 </style>
+
 <%@include file="dbconn.jsp" %>
 
 <%
@@ -93,6 +129,13 @@
 
     function renderImages() {
         const images = [ChinaData, KoreaData, JapanData];
+        for (let i = 1; i < 4; i++) {
+    		var description = document.getElementById('description-container-' + i);
+    		if(!(description.style.display === 'none' || description.style.display === '')) {
+    			toggleDescription(i);
+    		}
+    	}
+        
         for (let i = 0; i < 3; i++) {
             if (currentIndex < images[i].length) {
                 document.getElementById('gear-img-' + (i + 1)).src = images[i][currentIndex][1];
@@ -125,7 +168,7 @@
     function validateRanks() {
         const rankSet = new Set(currentRanks);
         if (rankSet.size !== currentRanks.length) {
-            alert('Each rank must be unique per set of images.');
+            alert('1,2,3등이 각각 하나씩 지정되어야 합니다!');
             return false;
         }
         return true;
@@ -171,23 +214,80 @@
     }
     
     function toggleDescription(gearId) {
-	    var text = document.getElementById('gear-text-' + gearId);
-	    var img = document.getElementById('image-frame-' + gearId);
-	    var buttons = document.getElementById('buttons-' + gearId);
-	    var description = document.getElementById('description-' + gearId);
-	
-	    if (description.style.display === 'none') {
-	        text.style.display = 'none';
-	        img.style.display = 'none';
-	        buttons.style.display = 'none';
-	        description.style.display = 'block';
-	    } else {
-	        text.style.display = 'block';
-	        img.style.display = 'block';
-	        buttons.style.display = 'block';
-	        description.style.display = 'none';
-	    }
-	}
+    	console.log('toggle!');
+        var text = document.getElementById('gear-text-' + gearId);
+        var imgFrame = document.getElementById('image-frame-' + gearId);
+        var buttons = document.getElementById('buttons-' + gearId);
+        var description = document.getElementById('description-container-' + gearId);
+        var newImg = document.getElementById('smallImage-' + gearId);
+        var gearImg = document.getElementById('gear-img-' + gearId);
+        
+        if (description.style.display === 'none' || description.style.display === '') {
+        	console.log('executed');
+            text.style.display = 'none';
+            imgFrame.style.display = 'none';
+            buttons.style.display = 'none';
+            newImg.src = gearImg.src; // 작은 이미지의 소스 설정
+            description.style.display = 'flex';
+        } else {
+        	console.log('executed2');
+        	console.log(description.style.display);
+            text.style.display = 'block';
+            imgFrame.style.display = 'flex';
+            buttons.style.display = 'block';
+            description.style.display = 'none';
+        }
+    }
+    
+    async function getChatGPTResponse(prompt) {
+        const apiKey = 'sk-proj-Aupakm6kmgZOYGjbgp8oT3BlbkFJZGZiMIwRludy3aQrPB1q'; // OpenAI API 키 설정
+        const url = 'https://api.openai.com/v1/chat/completions';
+        const data = {
+            model: "gpt-3.5-turbo",
+            messages: [{"role": "user", "content": prompt}],
+            temperature: 1,
+            top_p: 1,
+            n: 1,
+            stream: false,
+            max_tokens: 500,
+            presence_penalty: 0,
+            frequency_penalty: 0
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer sk-proj-Aupakm6kmgZOYGjbgp8oT3BlbkFJZGZiMIwRludy3aQrPB1q'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error from API: ${errorText}`);
+        }
+        
+        const result = await response.json();
+		
+        return result.choices[0].message.content;
+    }
+
+    async function handlePromptInput(event, gearId) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const promptInput = document.getElementById('prompt-input-' + gearId);
+            const promptResponse = document.getElementById('prompt-response-' + gearId);
+            const userPrompt = promptInput.value;
+            
+            if (userPrompt !== "") {
+            	console.log('userPrompt: ' + userPrompt);
+                promptResponse.innerHTML = "Loading...";
+                const response = await getChatGPTResponse(userPrompt);
+                promptResponse.innerHTML = response;
+            }
+        }
+    }
 </script>
 </head>
 <body>
@@ -200,54 +300,81 @@
                 <img id="gear-img-1" src="" alt="Outdoor Gear 1">
             </div>
             <div class="buttons" id="buttons-1">
-                <button id="gear-1-rank-1" onclick="selectRank(1, 1)">1st</button>
-                <button id="gear-1-rank-2" onclick="selectRank(1, 2)">2nd</button>
-                <button id="gear-1-rank-3" onclick="selectRank(1, 3)">3rd</button>
+                <button id="gear-1-rank-1" onclick="selectRank(1, 1)">1등</button>
+                <button id="gear-1-rank-2" onclick="selectRank(1, 2)">2등</button>
+                <button id="gear-1-rank-3" onclick="selectRank(1, 3)">3등</button>
             </div>
-            <button onclick="toggleDescription(1)">Description</button>
-		        <div id="description-1" class="description">
-		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-		            
-		        </div>
+            <button onclick="toggleDescription(1)">문화 설명</button>
+            <div id="description-container-1" class="description-container">
+                <div class="description-content">
+                    <img id="smallImage-1" alt="gear-smallimg-1">
+                    <div id="description-1" class="description">
+                        <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+                        This is the description text.
+                    </div>
+                </div>
+                <div id="prompt-container-1" class="prompt-container">
+                    <input id="prompt-input-1" class="prompt-input" type="text" placeholder="추가 질문사항을 입력하고 ENTER!" onkeypress="handlePromptInput(event, 1)">
+                    <div id="prompt-response-1" class="prompt-response"></div>
+                </div>
+            </div>
         </div>
 
         <div class="gear-item">
-            <div id="gear-text-2">Outdoor Gear 2</div>
+            <div id="gear-text-2">Outdoor Gear 1</div>
             <div class="image-frame" id="image-frame-2">
                 <img id="gear-img-2" src="" alt="Outdoor Gear 2">
             </div>
             <div class="buttons" id="buttons-2">
-                <button id="gear-2-rank-1" onclick="selectRank(2, 1)">1st</button>
-                <button id="gear-2-rank-2" onclick="selectRank(2, 2)">2nd</button>
-                <button id="gear-2-rank-3" onclick="selectRank(2, 3)">3rd</button>
+                <button id="gear-2-rank-1" onclick="selectRank(2, 1)">1등</button>
+                <button id="gear-2-rank-2" onclick="selectRank(2, 2)">2등</button>
+                <button id="gear-2-rank-3" onclick="selectRank(2, 3)">3등</button>
             </div>
-            <button onclick="toggleDescription(2)">Description</button>
-		        <div id="description-2" class="description">
-		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-		            
-		        </div>
+            <button onclick="toggleDescription(2)">문화 설명</button>
+            <div id="description-container-2" class="description-container">
+                <div class="description-content">
+                    <img id="smallImage-2" alt="gear-smallimg-2">
+                    <div id="description-2" class="description">
+                        <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+                        This is the description text.
+                    </div>
+                </div>
+                <div id="prompt-container-2" class="prompt-container">
+                    <input id="prompt-input-2" class="prompt-input" type="text" placeholder="추가 질문사항을 입력하고 ENTER!" onkeypress="handlePromptInput(event, 2)">
+                    <div id="prompt-response-2" class="prompt-response"></div>
+                </div>
+            </div>
         </div>
 
         <div class="gear-item">
-            <div id="gear-text-3">Outdoor Gear 3</div>
+            <div id="gear-text-3">Outdoor Gear 1</div>
             <div class="image-frame" id="image-frame-3">
                 <img id="gear-img-3" src="" alt="Outdoor Gear 3">
             </div>
             <div class="buttons" id="buttons-3">
-                <button id="gear-3-rank-1" onclick="selectRank(3, 1)">1st</button>
-                <button id="gear-3-rank-2" onclick="selectRank(3, 2)">2nd</button>
-                <button id="gear-3-rank-3" onclick="selectRank(3, 3)">3rd</button>
+                <button id="gear-3-rank-1" onclick="selectRank(3, 1)">1등</button>
+                <button id="gear-3-rank-2" onclick="selectRank(3, 2)">2등</button>
+                <button id="gear-3-rank-3" onclick="selectRank(3, 3)">3등</button>
             </div>
-            <button onclick="toggleDescription(3)">Description</button>
-		        <div id="description-3" class="description">
-		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-		           
-		        </div>
+            <button onclick="toggleDescription(3)">문화 설명</button>
+            <div id="description-container-3" class="description-container">
+                <div class="description-content">
+                    <img id="smallImage-3" alt="gear-smallimg-3">
+                    <div id="description-3" class="description">
+                        <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+                        This is the description text.
+                    </div>
+                </div>
+                <div id="prompt-container-3" class="prompt-container">
+                    <input id="prompt-input-3" class="prompt-input" type="text" placeholder="추가 질문사항을 입력하고 ENTER!" onkeypress="handlePromptInput(event, 3)">
+                    <div id="prompt-response-3" class="prompt-response"></div>
+                </div>
+            </div>
         </div>
 
     </div>
     <div class="next-button">
-    	<button class="next-button" onclick="nextImages()">Next</button>
+    	<button class="next-button" onclick="nextImages()" id="next-button">다음</button>
     </div>
 
     <jsp:include page="footer.jsp" />
