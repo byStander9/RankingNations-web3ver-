@@ -258,7 +258,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer sk-proj-Aupakm6kmgZOYGjbgp8oT3BlbkFJZGZiMIwRludy3aQrPB1q'
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify(data)
         });
