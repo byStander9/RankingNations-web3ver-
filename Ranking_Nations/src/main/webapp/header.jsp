@@ -55,13 +55,13 @@
    
    <script>
 	   // 드롭다운을 보여주는 함수
-		function showDropdown() {
-		    document.getElementById("myDropdown").classList.add("show");
+		function showDropdown(dropdownid) {
+			dropdownid.classList.add("show");
 		}
 		
 		// 드롭다운을 숨기는 함수
-		function hideDropdown() {
-		    document.getElementById("myDropdown").classList.remove("show");
+		function hideDropdown(dropdownid) {
+			dropdownid.classList.remove("show");
 		}
 	</script>
 </head>
@@ -69,15 +69,22 @@
 	<div class="navbar">
         <div class="logo"><a href="main.jsp">Acme Inc</a></div>
         <div class="menu">
-            <div class="dropdown" onmouseover="showDropdown()" onmouseout="hideDropdown()">
-			    <a href="#">category</a>
-			    <div class="dropdown-content" id="myDropdown">
-			        <a href="vote.jsp?category=clothes">의복</a>
+            <div class="dropdown" onmouseover="showDropdown(voteDropdown)" onmouseout="hideDropdown(voteDropdown)">
+			    <a href="vote2.jsp?category=clothes">category</a>
+			    <div class="dropdown-content" id="voteDropdown">
+			        <a href="vote2.jsp?category=clothes">의복</a>
 			        <a href="#">링크 2</a>
 			        <a href="#">링크 3</a>
 	    		</div>
 			</div>
-         	<div><a href="#">Comment Board</a></div>
+			<div class="dropdown" onmouseover="showDropdown(totalRankingsDropdown)" onmouseout="hideDropdown(totalRankingsDropdown)">
+	         	<a href="totalRankings.jsp?category=clothes">Total Rankings</a>
+	         	<div class="dropdown-content" id="totalRankingsDropdown">
+				        <a href="totalRankings.jsp?category=clothes">의복</a>
+				        <a href="#">링크 2</a>
+				        <a href="#">링크 3</a>
+	    		</div>
+	    	</div>
            	<div><a href="#">myPage</a></div>
         </div>
     </div>

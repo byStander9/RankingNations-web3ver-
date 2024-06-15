@@ -82,6 +82,8 @@
 		String[][] ChinaData = new String[5][3];
 		String[][] KoreaData = new String[5][3];
 		String[][] JapanData = new String[5][3];
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
 		try {
 	        String sql = "SELECT * FROM " +category+ " WHERE country_name = 'China'"; // 3개의 이미지만 가져오기
 	        rs = stmt.executeQuery(sql);
@@ -94,18 +96,32 @@
 	        }
 	        
 	        sql = "SELECT * FROM " +category+ " WHERE country_name = 'Korea'"; // 3개의 이미지만 가져오기
-	        rs = stmt.executeQuery(sql);
+	        
+	        rs2 = stmt.executeQuery(sql);
 	        index1 = 0;
-	        while(rs.next()) {
-	            KoreaData[index1][0] = rs.getString("clothing_name");
-	            KoreaData[index1][1] = rs.getString("image");
-	            KoreaData[index1][2] = rs.getString("description");
+	        while(rs2.next()) {
+	            KoreaData[index1][0] = rs2.getString("clothing_name");
+	            KoreaData[index1][1] = rs2.getString("image");
+	            KoreaData[index1][2] = rs2.getString("description");
+	            index1++;
+	        }
+	        
+			sql = "SELECT * FROM " +category+ " WHERE country_name = 'Japan'"; // 3개의 이미지만 가져오기
+	        
+	        rs3 = stmt.executeQuery(sql);
+	        index1 = 0;
+	        while(rs3.next()) {
+	            JapanData[index1][0] = rs3.getString("clothing_name");
+	            JapanData[index1][1] = rs3.getString("image");
+	            JapanData[index1][2] = rs3.getString("description");
 	            index1++;
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } finally {
 	        if (rs != null) rs.close();
+	        if (rs2 != null) rs2.close();
+	        if (rs3 != null) rs3.close();
 	        if (stmt != null) stmt.close();
 	        if (conn != null) conn.close();
 	    }
@@ -113,62 +129,67 @@
     <jsp:include page="header.jsp"/>
     
     <div class="container">
-    	<div class="gear-item">
-		    <div id="gear-text-1">Outdoor Gear 1</div>
-		   	<div class="image-frame" id="image-frame-1">
-		        <img id="gear-img-1" src="<%= ChinaData[0][1] %>" alt="Outdoor Gear 1">
+    	<div>
+	    	<div class="gear-item">
+			    <div id="gear-text-1">Outdoor Gear 1</div>
+			   	<div class="image-frame" id="image-frame-1">
+			        <img id="gear-img-1" src="<%= ChinaData[0][1] %>" alt="Outdoor Gear 1">
+			    </div>
+		        <div id="buttons-1" class="buttons">
+		            <button>1st</button>
+		            <button>2nd</button>
+		            <button>3rd</button>
+		        </div>
+		        <button onclick="toggleDescription(1)">Description</button>
+		        <div id="description-1" class="description">
+		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+		            <%
+		                out.print(ChinaData[0][2]);
+		            %>
+		        </div>
 		    </div>
-	        <div id="buttons-1" class="buttons">
-	            <button>1st</button>
-	            <button>2nd</button>
-	            <button>3rd</button>
-	        </div>
-	        <button onclick="toggleDescription(1)">Description</button>
-	        <div id="description-1" class="description">
-	            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-	            <%
-	                out.print(ChinaData[0][2]);
-	            %>
-	        </div>
-	    </div>
-	    
-	    <div class="gear-item">
-	        <div id="gear-text-2">Outdoor Gear 2</div>
-	        <div class="image-frame" id="image-frame-2">
-		        <img id="gear-img-2" src="<%= KoreaData[0][1] %>" alt="Outdoor Gear 2">
+		    
+		    <div class="gear-item">
+		        <div id="gear-text-2">Outdoor Gear 2</div>
+		        <div class="image-frame" id="image-frame-2">
+			        <img id="gear-img-2" src="<%= KoreaData[0][1] %>" alt="Outdoor Gear 2">
+			    </div>
+		        <div id="buttons-2" class="buttons">
+		            <button>1st</button>
+		            <button>2nd</button>
+		            <button>3rd</button>
+		        </div>
+		        <button onclick="toggleDescription(2)">Description</button>
+		        <div id="description-2" class="description">
+		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+		            <%
+		            	out.print(KoreaData[0][2]);
+		            %>
+		        </div>
 		    </div>
-	        <div id="buttons-2" class="buttons">
-	            <button>1st</button>
-	            <button>2nd</button>
-	            <button>3rd</button>
-	        </div>
-	        <button onclick="toggleDescription(2)">Description</button>
-	        <div id="description-2" class="description">
-	            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-	            <%
-	                
-	            %>
-	        </div>
-	    </div>
-	    
-	    <div class="gear-item">
-	        <div id="gear-text-3">Outdoor Gear 3</div>
-	        <div class="image-frame" id="image-frame-3">
-		        <img id="gear-img-3" src="<%= ChinaData[2][1] %>" alt="Outdoor Gear 3">
+		    
+		    <div class="gear-item">
+		        <div id="gear-text-3">Outdoor Gear 3</div>
+		        <div class="image-frame" id="image-frame-3">
+			        <img id="gear-img-3" src="<%= JapanData[0][1] %>" alt="Outdoor Gear 3">
+			    </div>
+		        <div id="buttons-3" class="buttons">
+		            <button>1st</button>
+		            <button>2nd</button>
+		            <button>3rd</button>
+		        </div>
+		        <button onclick="toggleDescription(3)">Description</button>
+		        <div id="description-3" class="description">
+		            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
+		            <%
+		            	out.print(JapanData[0][2]);
+		            %>
+		        </div>
 		    </div>
-	        <div id="buttons-3" class="buttons">
-	            <button>1st</button>
-	            <button>2nd</button>
-	            <button>3rd</button>
-	        </div>
-	        <button onclick="toggleDescription(3)">Description</button>
-	        <div id="description-3" class="description">
-	            <%-- 데이터베이스에서 가져온 설명서 형식의 내용 출력 --%>
-	            <%
-	            	
-	            %>
-	        </div>
-	    </div>
+		</div>
+		<div>
+			
+		</div>
     </div>
     
     
