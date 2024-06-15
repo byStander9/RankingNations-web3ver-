@@ -240,7 +240,7 @@
     }
     
     async function getChatGPTResponse(prompt) {
-        
+        const apiKey = 'MY API KEY'; // OpenAI API 키 설정
         const url = 'https://api.openai.com/v1/chat/completions';
         const data = {
             model: "gpt-3.5-turbo",
