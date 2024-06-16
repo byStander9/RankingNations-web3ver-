@@ -71,11 +71,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Country</th>
-                    <th>1st Place (3 points)</th>
-                    <th>2nd Place (2 points)</th>
-                    <th>3rd Place (1 point)</th>
-                    <th>Total Score</th>
+                    <th>국가</th>
+                    <th>1등 횟수 (3 점)</th>
+                    <th>2등 횟수 (2 점)</th>
+                    <th>3등 횟수 (1 점)</th>
+                    <th>종합 점수</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,10 +94,10 @@
             </tbody>
         </table>
         <div class="options">
-            <label><input type="checkbox" id="showTotalScore" onclick="updateChart()" checked> Show Total Score</label>
-            <label><input type="checkbox" id="show1stPlace" onclick="updateChart()" checked> Show 1st Place</label>
-            <label><input type="checkbox" id="show2ndPlace" onclick="updateChart()" checked> Show 2nd Place</label>
-            <label><input type="checkbox" id="show3rdPlace" onclick="updateChart()" checked> Show 3rd Place</label>
+            <label><input type="checkbox" id="showTotalScore" onclick="updateChart()" checked> 종합 점수 보기</label>
+            <label><input type="checkbox" id="show1stPlace" onclick="updateChart()" checked> 1등 횟수 보기</label>
+            <label><input type="checkbox" id="show2ndPlace" onclick="updateChart()" checked> 2등 횟수 보기</label>
+            <label><input type="checkbox" id="show3rdPlace" onclick="updateChart()" checked> 3등 횟수 보기</label>
         </div>
         <canvas id="rankingChart" width="200" height="55"></canvas>
     </div>
@@ -113,28 +113,28 @@
         labels: ['China', 'Korea', 'Japan'],
         datasets: [
             {
-                label: '1st Place',
+                label: '1등 횟수',
                 data: [chinaScores[0], koreaScores[0], japanScores[0]],
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             },
             {
-                label: '2nd Place',
+                label: '2등 횟수',
                 data: [chinaScores[1], koreaScores[1], japanScores[1]],
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             },
             {
-                label: '3rd Place',
+                label: '3등 횟수',
                 data: [chinaScores[2], koreaScores[2], japanScores[2]],
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             },
             {
-                label: 'Total Score',
+                label: '종합 점수',
                 data: [chinaScores[3], koreaScores[3], japanScores[3]],
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderColor: 'rgba(153, 102, 255, 1)',

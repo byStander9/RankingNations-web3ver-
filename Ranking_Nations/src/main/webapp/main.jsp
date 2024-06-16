@@ -188,13 +188,12 @@
         <div class="sidebar">
             <div id="leftBar">
                 <h4>등수 매기기</h4>
-                <a href="vote2.jsp?category=clothes" class="btn-primary">의복</a>
-        		<a href="vote2.jsp?category=food" class="btn-secondary">음식</a>
+                <a href="vote.jsp?category=clothes" class="btn-primary">의복</a>
+        		<a href="vote.jsp?category=food" class="btn-secondary">음식</a>
             </div>
             
             <div id="rightBar">
                 <h4>역대 통계 보기</h4>
-                <a href="#" class="btn-success">전체 통계 보기</a>
 		        <a href="totalRankings.jsp?category=clothes" class="btn-info">의복 통계 보기</a>
 		        <a href="totalRankings.jsp?category=food" class="btn-warning">음식 통계 보기</a>
             </div>

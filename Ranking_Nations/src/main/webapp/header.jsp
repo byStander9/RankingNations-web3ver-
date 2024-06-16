@@ -67,21 +67,20 @@
 </head>
 <body>
 	<div class="navbar">
-        <div class="logo"><a href="main.jsp">한중일 투표소</a></div>
+        <div class="logo"><a href="main.jsp">동방삼룡 문화순위</a></div>
         <div class="menu">
             <div class="dropdown" onmouseover="showDropdown(voteDropdown)" onmouseout="hideDropdown(voteDropdown)">
-			    <a href="vote2.jsp?category=clothes">카테고리</a>
+			    <a href="vote.jsp?category=clothes">카테고리</a>
 			    <div class="dropdown-content" id="voteDropdown">
-			        <a href="vote2.jsp?category=clothes">의복</a>
-			        <a href="vote2.jsp?category=food">음식</a>
+			        <a href="vote.jsp?category=clothes">의복</a>
+			        <a href="vote.jsp?category=food">음식</a>
 	    		</div>
 			</div>
 			<div class="dropdown" onmouseover="showDropdown(totalRankingsDropdown)" onmouseout="hideDropdown(totalRankingsDropdown)">
 	         	<a href="totalRankings.jsp?category=clothes">전체기간 랭킹</a>
 	         	<div class="dropdown-content" id="totalRankingsDropdown">
-				        <a href="totalRankings.jsp?category=clothes">의복</a>
-				        <a href="totalRankings.jsp?category=food">음식</a>
-				        <a href="#">링크 3</a>
+			        <a href="totalRankings.jsp?category=clothes">의복</a>
+			        <a href="totalRankings.jsp?category=food">음식</a>
 	    		</div>
 	    	</div>
         </div>
