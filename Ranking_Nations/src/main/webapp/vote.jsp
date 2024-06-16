@@ -140,6 +140,8 @@
                 document.getElementById('gear-img-' + (i + 1)).src = images[i][currentIndex][1];
                 document.getElementById('gear-text-' + (i + 1)).innerText = images[i][currentIndex][0];
                 document.getElementById('description-' + (i + 1)).innerText = images[i][currentIndex][2];
+                document.getElementById('prompt-response-' + (i + 1)).innerHTML ="";
+                document.getElementById('prompt-input-' + (i + 1)).value = "";
                 resetButtons(i + 1); 
             } else {
                 document.getElementById('gear-img-' + (i + 1)).src = '';
@@ -256,7 +258,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer`
+                'Authorization': `Bearer `
             },
             body: JSON.stringify(data)
         });
